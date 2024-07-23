@@ -4,7 +4,7 @@ from configs.paths_config import dataset_paths
 
 DATASETS = {
     "caricature": {
-        "transforms": transforms_config.SketchToImageTransforms,
+        "transforms": transforms_config.CaricatureTransforms,
         "train_source_root": "../../datasets/lfw_real_sep/a-p",
         "train_target_root": "../../datasets/lfw_cari_sep/a-p",
         "test_source_root": "../../datasets/lfw_real_sep/q-z",
