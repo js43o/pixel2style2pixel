@@ -5,6 +5,7 @@ from utils import data_utils
 from random import random
 from torchvision.transforms import transforms
 import torchvision.transforms.functional as F
+import math
 
 
 class ImagesDataset(Dataset):
@@ -44,18 +45,32 @@ class ImagesDataset(Dataset):
             from_im = to_im
 
         if self.opts.augmentation:
-            should_flip, should_crop = random() < 0.5, random() < 0.5
-            if should_flip:
+            _, origin_h, origin_w = from_im.shape
+            PAD_MAX = origin_h // 2
+
+            # Flip
+            if random() < 0.5:
                 from_im = torch.flip(from_im, [2])
                 to_im = torch.flip(to_im, [2])
 
-            if should_crop:
-                i, j, h, w = transforms.RandomResizedCrop.get_params(
-                    from_im, scale=(0.1, 1), ratio=(0.5, 2)
-                )
-                _, origin_h, origin_w = from_im.shape
-                resize = transforms.Resize((origin_h, origin_w), antialias=True)
-                from_im = resize(F.crop(from_im, i, j, h, w))
-                to_im = resize(F.crop(to_im, i, j, h, w))
+            crop_i, crop_j, crop_h, crop_w = transforms.RandomResizedCrop.get_params(
+                from_im, scale=(0.5, 1), ratio=(0.75, 1.25)
+            )
+            pad_arr = [math.floor(random() * PAD_MAX) for _ in range(4)]
+            angle = random() * 90 - 45
+
+            # Crop or Pad
+            if random() < 0.5:  # Do crop
+                from_im = F.crop(from_im, crop_i, crop_j, crop_h, crop_w)
+                to_im = F.crop(to_im, crop_i, crop_j, crop_h, crop_w)
+            else:  # Do pad
+                from_im = F.pad(from_im, pad_arr)
+                to_im = F.pad(to_im, pad_arr)
+
+            # Rotate and Resize
+            from_im = F.rotate(from_im, angle)
+            from_im = F.resize(from_im, (origin_h, origin_w), antialias=True)
+            to_im = F.rotate(to_im, angle)
+            to_im = F.resize(to_im, (origin_h, origin_w), antialias=True)
 
         return from_im, to_im
