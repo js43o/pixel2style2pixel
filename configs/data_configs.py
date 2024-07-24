@@ -5,10 +5,10 @@ from configs.paths_config import dataset_paths
 DATASETS = {
     "caricature": {
         "transforms": transforms_config.CaricatureTransforms,
-        "train_source_root": "../../datasets/lfw_real_sep/a-p",
-        "train_target_root": "../../datasets/lfw_cari_sep/a-p",
-        "test_source_root": "../../datasets/lfw_real_sep/q-z",
-        "test_target_root": "../../datasets/lfw_cari_sep/q-z",
+        "train_source_root": "../../datasets/face_to_caricature/train/source",
+        "train_target_root": "../../datasets/face_to_caricature/train/target",
+        "test_source_root": "../../datasets/face_to_caricature/test/source",
+        "test_target_root": "../../datasets/face_to_caricature/test/target",
     },
     "ffhq_frontalize": {
         "transforms": transforms_config.FrontalizationTransforms,
