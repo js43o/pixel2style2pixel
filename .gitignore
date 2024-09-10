@@ -1,4 +1,5 @@
-checkpoints
-experiments
-pretrained_models
-datasets/temp
+pretrained_models/*
+experiments/*
+temp*
+wandb*
+*.pyc

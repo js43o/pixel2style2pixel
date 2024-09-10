@@ -10,11 +10,14 @@ class TrainOptions:
 
     def initialize(self):
         self.parser.add_argument(
-            "--exp_dir", type=str, help="Path to experiment output directory"
+            "--exp_dir",
+            type=str,
+            help="Path to experiment output directory",
+            default="experiments",
         )
         self.parser.add_argument(
             "--dataset_type",
-            default="ffhq_encode",
+            default="caricature",
             type=str,
             help="Type of dataset/experiment to run",
         )
@@ -41,7 +44,7 @@ class TrainOptions:
         )
 
         self.parser.add_argument(
-            "--batch_size", default=4, type=int, help="Batch size for training"
+            "--batch_size", default=8, type=int, help="Batch size for training"
         )
         self.parser.add_argument(
             "--test_batch_size",
@@ -130,7 +133,7 @@ class TrainOptions:
         )
         self.parser.add_argument(
             "--checkpoint_path",
-            default=None,
+            default="pretrained_models/psp_ffhq_encode.pt",
             type=str,
             help="Path to pSp model checkpoint",
         )
@@ -157,12 +160,13 @@ class TrainOptions:
             "--val_interval", default=1000, type=int, help="Validation interval"
         )
         self.parser.add_argument(
-            "--save_interval", default=None, type=int, help="Model checkpoint interval"
+            "--save_interval", default=1000, type=int, help="Model checkpoint interval"
         )
 
         # arguments for weights & biases support
         self.parser.add_argument(
             "--use_wandb",
+            default=True,
             action="store_true",
             help="Whether to use Weights & Biases to track experiment.",
         )
@@ -178,6 +182,7 @@ class TrainOptions:
         # arguments for data augmentation
         self.parser.add_argument(
             "--augmentation",
+            default=True,
             action="store_true",
             help="For data augmentation, random crop or flip",
         )
